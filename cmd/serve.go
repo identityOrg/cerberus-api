@@ -24,26 +24,20 @@ import (
 // serveCmd represents the serve command
 var serveCmd = &cobra.Command{
 	Use:   "serve",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Start the API server of Cerberus IAM",
+	Long: `The API server for Cerberus Identity and Access Management Software:
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+Cerberus is a Identity and Access Management Software, built on Golang.
+Which is fast and reliable. To start the server execute
+
+  cerberus serve
+  cerberus serve --debug  //to enable debug logging
+
+Thanks for using it.`,
 	Run: setup.StartServer,
 }
 
 func init() {
 	rootCmd.AddCommand(serveCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// serveCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// serveCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	serveCmd.Flags().StringP("addr", "a", "localhost:9090", "Listen port for server")
 }

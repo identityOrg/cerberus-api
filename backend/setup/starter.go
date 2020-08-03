@@ -9,11 +9,20 @@ import (
 )
 
 func StartServer(cmd *cobra.Command, args []string) {
-	e := NewServer(true)
+	debug, err := cmd.Flags().GetBool("debug")
+	if err != nil {
+		panic(err)
+	}
+	address, err := cmd.Flags().GetString("addr")
+	if err != nil {
+		panic(err)
+	}
+
+	e := NewServer(debug)
 
 	// Start server
 	go func() {
-		if err := e.Start("localhost:9090"); err != nil {
+		if err := e.Start(address); err != nil {
 			e.Logger.Info("shutting down the server")
 		}
 	}()
