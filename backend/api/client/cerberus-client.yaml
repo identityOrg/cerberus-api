@@ -1,0 +1,141 @@
+---
+openapi: 3.0.2
+info:
+  title: cerberus-client
+  version: 1.0.0
+  description: API Specification for Cerberus Client or Service Provider
+paths:
+  /v1/api/client:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientSummaryPage'
+              examples:
+                success:
+                  value:
+                    start: 12
+                    total: 96
+                    size: 78
+                    clients:
+                    - client_id: some text
+                      name: some text
+                      public: true
+                    - client_id: some text
+                      name: some text
+                      public: true
+          description: Success Response
+      operationId: list-all
+      summary: List All Clients
+  /v1/api/client/{client_id}:
+    summary: Get client details
+    description: A detail resource for client
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientDetails'
+              examples:
+                Success Response:
+                  value:
+                    client_id: some text
+                    name: some text
+                    description: some text
+          description: Success Response
+      operationId: client-detail
+      summary: Fetch client details
+      description: Fetch details for a client. Doesnt include the client secret even
+        if the client has one.
+    put:
+      requestBody:
+        description: Client data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientDetails'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientDetails'
+          description: Success Response
+      operationId: create-client
+      summary: Create a new Client
+      description: Create a new client using system default as fallback value. Request
+        object is used to override the system default.
+    parameters:
+    - name: client_id
+      description: Client ID to associate details with
+      schema:
+        type: string
+      in: path
+      required: true
+components:
+  schemas:
+    ClientSummary:
+      title: Root Type for ClientSummary
+      description: A summary object for client
+      type: object
+      properties:
+        client_id:
+          type: string
+        name:
+          type: string
+        public:
+          type: boolean
+      example:
+        client_id: hqjhbcjhwec
+        name: Example Client
+        public: false
+    ClientSummaryPage:
+      title: Root Type for ClientSummaryPage
+      description: A page of client summary
+      type: object
+      properties:
+        start:
+          format: int32
+          type: integer
+        total:
+          format: int32
+          type: integer
+        size:
+          format: int32
+          type: integer
+        clients:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClientSummary'
+      example:
+        start: 39
+        total: 10
+        size: 62
+        clients:
+        - client_id: some text
+          name: some text
+          public: true
+        - client_id: some text
+          name: some text
+          public: true
+    ClientDetails:
+      description: A detail client representation
+      type: object
+      properties:
+        client_id:
+          description: Client ID
+          type: string
+        name:
+          description: Client name
+          type: string
+        description:
+          description: A description of the client
+          type: string
+      example:
+        client_id: some text
+        name: some text
+        description: some text

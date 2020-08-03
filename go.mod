@@ -3,6 +3,7 @@ module github.com/identityOrg/cerberus-api
 go 1.14
 
 require (
+	github.com/deepmap/oapi-codegen v1.3.11
 	github.com/getkin/kin-openapi v0.19.0
 	github.com/gobuffalo/packr/v2 v2.8.0 // indirect
 	github.com/karrick/godirwalk v1.15.6 // indirect

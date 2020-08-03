@@ -2,6 +2,7 @@ package setup
 
 import (
 	"context"
+	"github.com/identityOrg/cerberus-api/backend/api"
 	"github.com/spf13/cobra"
 	"os"
 	"os/signal"
@@ -19,6 +20,7 @@ func StartServer(cmd *cobra.Command, args []string) {
 	}
 
 	e := NewServer(debug)
+	api.RegisterAllAPI(e)
 
 	// Start server
 	go func() {
