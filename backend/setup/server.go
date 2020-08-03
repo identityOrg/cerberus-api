@@ -16,7 +16,7 @@ func NewServer(debug bool) *echo.Echo {
 	e.Use(middleware.Logger(), middleware.RequestID(), middleware.Recover())
 	//e.Use(session.Middleware(sessions.NewCookieStore([]byte("secret"))))
 	e.Use(middleware.StaticWithConfig(middleware.StaticConfig{
-		Root:   "static",
+		Root:   "dist/cerberus",
 		Browse: false,
 	}))
 
