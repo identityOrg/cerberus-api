@@ -1,0 +1,184 @@
+---
+openapi: 3.0.2
+info:
+  title: cerberus-user
+  version: 1.0.0
+  description: Cerberus User API
+paths:
+  /v1/api/user:
+    summary: User collection resource
+    description: A resource representing a user collection and operations
+    get:
+      parameters:
+      - name: page_size
+        description: |-
+          Number of items in each page.
+          Default value is 10.
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: page_number
+        description: |-
+          Page number to return in response.
+          Starts with 1 and default value is 1 too.
+        schema:
+          type: integer
+        in: query
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSummaryPage'
+          description: Success Response
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: |-
+            Invalid Input
+            Negative parameter value
+        "401":
+          $ref: '#/components/responses/UnAuthorized'
+      operationId: list-user
+      summary: List All Users
+      description: List all users without search criteria
+  /v1/api/user/{id}:
+    summary: Individual user resource
+    description: A resource to represent an individual user resource and perform operation
+      on that
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetails'
+          description: Success Response
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: User Not Found
+        "401":
+          $ref: '#/components/responses/UnAuthorized'
+      operationId: user-detail
+      summary: Fetch user details
+      description: Fetch details about single user by user id
+    parameters:
+    - name: id
+      description: User identifier, not same as username
+      schema:
+        type: integer
+      in: path
+      required: true
+components:
+  schemas:
+    UserSummary:
+      title: Root Type for UserSummary
+      description: A summary representation of user object
+      type: object
+      properties:
+        username:
+          description: Login username
+          type: string
+        email:
+          description: Email address
+          type: string
+        active:
+          description: User is active or inactive
+          type: boolean
+        blocked:
+          description: User is blocked by invalid attempt
+          type: boolean
+      example:
+        username: user1
+        email: user1@domain.com
+        active: true
+        blocked: false
+    UserSummaryPage:
+      description: A page of user summary
+      required:
+      - users
+      type: object
+      properties:
+        users:
+          description: A collection of users
+          type: array
+          items:
+            $ref: '#/components/schemas/UserSummary'
+        page_number:
+          format: int32
+          description: Page number of the response chunk
+          type: integer
+        page_total:
+          format: int32
+          description: Total available pages
+          type: integer
+      example:
+        users:
+        - username: some text
+          email: some text
+          active: true
+          blocked: true
+        - username: some text
+          email: some text
+          active: true
+          blocked: true
+        page_number: 54
+        page_total: 61
+    UserDetails:
+      description: A detail user object information
+      required:
+      - username
+      - name
+      type: object
+      properties:
+        username:
+          description: Username for login
+          type: string
+        name:
+          $ref: '#/components/schemas/UserName'
+          description: A composite user name object
+    UserName:
+      title: Root Type for UserName
+      description: A username tontainer
+      type: object
+      properties:
+        given_name:
+          description: Given name
+          type: string
+        family_name:
+          description: Surname or family name
+          type: string
+      example:
+        given_name: ""
+        surname: ""
+    Error:
+      description: An error response object
+      type: object
+      properties:
+        error:
+          description: Error code
+          type: string
+        description:
+          description: Detail description
+          type: string
+  responses:
+    UnAuthorized:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Client is un authorized to access the request
+  securitySchemes:
+    OAuth:
+      scheme: bearer
+      type: http
+      description: OAuth security token
+security:
+- OAuth: []

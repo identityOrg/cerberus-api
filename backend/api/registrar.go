@@ -2,17 +2,24 @@ package api
 
 import (
 	"github.com/identityOrg/cerberus-api/backend/api/client"
+	"github.com/identityOrg/cerberus-api/backend/api/impl"
+	"github.com/identityOrg/cerberus-api/backend/api/user"
 	"github.com/labstack/echo/v4"
 	"net/http"
 )
 
-func RegisterAllAPI(e *echo.Echo) {
-	apiImpl := ClientImpl{}
-	client.RegisterHandlers(e, apiImpl)
-	e.GET("/v1/api/client-spec", respondApiSpec)
+func RegisterAllAPIs(e *echo.Echo) {
+	registerClientAPIs(e)
+	registerUserAPIs(e)
 }
 
-func respondApiSpec(ctx echo.Context) error {
+func registerClientAPIs(e *echo.Echo) {
+	apiImpl := impl.ClientServiceImpl{}
+	client.RegisterHandlers(e, apiImpl)
+	e.GET("/v1/api/client-spec", respondClientApiSpec)
+}
+
+func respondClientApiSpec(ctx echo.Context) error {
 	swagger, err := client.GetSwagger()
 	if err != nil {
 		return err
@@ -20,17 +27,16 @@ func respondApiSpec(ctx echo.Context) error {
 	return ctx.JSONPretty(http.StatusOK, swagger, "  ")
 }
 
-type ClientImpl struct {
+func registerUserAPIs(e *echo.Echo) {
+	apiImpl := impl.UserServiceImpl{}
+	user.RegisterHandlers(e, apiImpl)
+	e.GET("/v1/api/user-spec", respondUserApiSpec)
 }
 
-func (c ClientImpl) ListAll(ctx echo.Context) error {
-	return ctx.String(http.StatusOK, "Not implemented")
-}
-
-func (c ClientImpl) ClientDetail(ctx echo.Context, clientId string) error {
-	return ctx.String(http.StatusOK, "Not implemented: "+clientId)
-}
-
-func (c ClientImpl) CreateClient(ctx echo.Context, clientId string) error {
-	return ctx.String(http.StatusOK, "Not implemented: "+clientId)
+func respondUserApiSpec(ctx echo.Context) error {
+	swagger, err := user.GetSwagger()
+	if err != nil {
+		return err
+	}
+	return ctx.JSONPretty(http.StatusOK, swagger, "  ")
 }

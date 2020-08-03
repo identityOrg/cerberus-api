@@ -20,7 +20,7 @@ func StartServer(cmd *cobra.Command, args []string) {
 	}
 
 	e := NewServer(debug)
-	api.RegisterAllAPI(e)
+	api.RegisterAllAPIs(e)
 
 	// Start server
 	go func() {
