@@ -29,7 +29,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Client'
           description: Successful response - returns a single `Client`.
-      operationId: getClient
+      operationId: get-client
       summary: Get a Client
       description: Gets the details of a single instance of a `Client`.
     put:
@@ -46,7 +46,7 @@ paths:
       responses:
         "202":
           description: Successful response.
-      operationId: updateClient
+      operationId: update-client
       summary: Update a Client
       description: Updates an existing `Client`.
     delete:
@@ -56,7 +56,7 @@ paths:
       responses:
         "204":
           description: Successful response.
-      operationId: deleteClient
+      operationId: delete-client
       summary: Delete a Client
       description: Deletes an existing `Client`.
     parameters:
@@ -99,7 +99,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ClientSummaryPage'
           description: Successful response - returns an array of `Client` entities.
-      operationId: getclients
+      operationId: get-clients
       summary: List All clients
       description: Gets a list of all `Client` entities.
     post:
@@ -116,7 +116,7 @@ paths:
       responses:
         "201":
           description: Successful response.
-      operationId: createClient
+      operationId: create-client
       summary: Create a Client
       description: Creates a new instance of a `Client`.
   /v1/api/scopes/{id}:
@@ -135,7 +135,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Scope'
           description: Successful response - returns a single `Scope`.
-      operationId: getScope
+      operationId: get-scope
       summary: Get a Scope
       description: Gets the details of a single instance of a `Scope`.
     put:
@@ -152,7 +152,7 @@ paths:
       responses:
         "202":
           description: Successful response.
-      operationId: updateScope
+      operationId: update-scope
       summary: Update a Scope
       description: Updates an existing `Scope`.
     delete:
@@ -162,7 +162,7 @@ paths:
       responses:
         "204":
           description: Successful response.
-      operationId: deleteScope
+      operationId: delete-scope
       summary: Delete a Scope
       description: Deletes an existing `Scope`.
     parameters:
@@ -192,7 +192,7 @@ paths:
           description: Success Response
         "401":
           $ref: '#/components/responses/UnAuthorized'
-      operationId: change-password
+      operationId: change-user-password
       summary: Change Password
       description: Change user password
     parameters:
@@ -296,7 +296,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
           description: Successful response - returns a single `User`.
-      operationId: getUser
+      operationId: get-user
       summary: Get a User
       description: Gets the details of a single instance of a `User`.
     put:
@@ -313,7 +313,7 @@ paths:
       responses:
         "202":
           description: Successful response.
-      operationId: updateUser
+      operationId: update-user
       summary: Update a User
       description: Updates an existing `User`.
     delete:
@@ -323,7 +323,7 @@ paths:
       responses:
         "204":
           description: Successful response.
-      operationId: deleteUser
+      operationId: delete-user
       summary: Delete a User
       description: Deletes an existing `User`.
     parameters:
@@ -349,7 +349,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Claim'
           description: Successful response - returns a single `Claim`.
-      operationId: getClaim
+      operationId: get-claim
       summary: Get a Claim
       description: Gets the details of a single instance of a `Claim`.
     put:
@@ -366,7 +366,7 @@ paths:
       responses:
         "202":
           description: Successful response.
-      operationId: updateClaim
+      operationId: update-claim
       summary: Update a Claim
       description: Updates an existing `Claim`.
     delete:
@@ -376,7 +376,7 @@ paths:
       responses:
         "204":
           description: Successful response.
-      operationId: deleteClaim
+      operationId: delete-claim
       summary: Delete a Claim
       description: Deletes an existing `Claim`.
     parameters:
@@ -450,7 +450,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Scope'
           description: Successful response - returns an array of `Scope` entities.
-      operationId: getscopes
+      operationId: get-scopes
       summary: List All scopes
       description: Gets a list of all `Scope` entities.
     post:
@@ -467,7 +467,7 @@ paths:
       responses:
         "201":
           description: Successful response.
-      operationId: createScope
+      operationId: create-scope
       summary: Create a Scope
       description: Creates a new instance of a `Scope`.
   /v1/api/users:
@@ -503,7 +503,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserSummaryPage'
           description: Successful response - returns an array of `User` entities.
-      operationId: getusers
+      operationId: get-users
       summary: List All users
       description: Gets a list of all `User` entities.
     post:
@@ -520,7 +520,7 @@ paths:
       responses:
         "201":
           description: Successful response.
-      operationId: createUser
+      operationId: create-user
       summary: Create a User
       description: Creates a new instance of a `User`.
   /v1/api/claims:
@@ -556,7 +556,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ClaimPage'
           description: Successful response - returns an array of `Claim` entities.
-      operationId: getclaims
+      operationId: get-claims
       summary: List All claims
       description: Gets a list of all `Claim` entities.
     post:
@@ -573,7 +573,7 @@ paths:
       responses:
         "201":
           description: Successful response.
-      operationId: createClaim
+      operationId: create-claim
       summary: Create a Claim
       description: Creates a new instance of a `Claim`.
 components:
