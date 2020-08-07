@@ -1,0 +1,1042 @@
+---
+openapi: 3.0.2
+info:
+  title: cerberus-api
+  version: 1.0.0
+  description: Cerberus Admin APIs. Designed to work with cerberus installation and
+    implemented by cerberus-api application.
+  contact:
+    name: Prasenjit Purohit
+    url: https://www.prasenjit.net
+    email: prasenjit@prasenjit.net
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+paths:
+  /v1/api/clients/{id}:
+    summary: Path used to manage a single Client.
+    description: The REST endpoint/path used to get, update, and delete single instances
+      of an `Client`.  This path contains `GET`, `PUT`, and `DELETE` operations used
+      to perform the get, update, and delete tasks, respectively.
+    get:
+      tags:
+      - superuser
+      - client
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+          description: Successful response - returns a single `Client`.
+      operationId: getClient
+      summary: Get a Client
+      description: Gets the details of a single instance of a `Client`.
+    put:
+      requestBody:
+        description: Updated `Client` information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Client'
+        required: true
+      tags:
+      - superuser
+      - client
+      responses:
+        "202":
+          description: Successful response.
+      operationId: updateClient
+      summary: Update a Client
+      description: Updates an existing `Client`.
+    delete:
+      tags:
+      - superuser
+      - client
+      responses:
+        "204":
+          description: Successful response.
+      operationId: deleteClient
+      summary: Delete a Client
+      description: Deletes an existing `Client`.
+    parameters:
+    - name: id
+      description: A unique identifier for a `Client`.
+      schema:
+        type: string
+      in: path
+      required: true
+  /v1/api/clients:
+    summary: Path used to manage the list of clients.
+    description: The REST endpoint/path used to list and create zero or more `Client`
+      entities.  This path contains a `GET` and `POST` operation to perform the list
+      and create tasks, respectively.
+    get:
+      tags:
+      - superuser
+      - client
+      parameters:
+      - name: page_size
+        description: |-
+          Number of items in each page.
+          Default value is 10.
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: page_number
+        description: |-
+          Page number to return in response.
+          Starts with 1 and default value is 1 too.
+        schema:
+          type: integer
+        in: query
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientSummaryPage'
+          description: Successful response - returns an array of `Client` entities.
+      operationId: getclients
+      summary: List All clients
+      description: Gets a list of all `Client` entities.
+    post:
+      requestBody:
+        description: A new `Client` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Client'
+        required: true
+      tags:
+      - superuser
+      - client
+      responses:
+        "201":
+          description: Successful response.
+      operationId: createClient
+      summary: Create a Client
+      description: Creates a new instance of a `Client`.
+  /v1/api/scopes/{id}:
+    summary: Path used to manage a single Scope.
+    description: The REST endpoint/path used to get, update, and delete single instances
+      of an `Scope`.  This path contains `GET`, `PUT`, and `DELETE` operations used
+      to perform the get, update, and delete tasks, respectively.
+    get:
+      tags:
+      - superuser
+      - scope
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Scope'
+          description: Successful response - returns a single `Scope`.
+      operationId: getScope
+      summary: Get a Scope
+      description: Gets the details of a single instance of a `Scope`.
+    put:
+      requestBody:
+        description: Updated `Scope` information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Scope'
+        required: true
+      tags:
+      - superuser
+      - scope
+      responses:
+        "202":
+          description: Successful response.
+      operationId: updateScope
+      summary: Update a Scope
+      description: Updates an existing `Scope`.
+    delete:
+      tags:
+      - superuser
+      - scope
+      responses:
+        "204":
+          description: Successful response.
+      operationId: deleteScope
+      summary: Delete a Scope
+      description: Deletes an existing `Scope`.
+    parameters:
+    - name: id
+      description: A unique identifier for a `Scope`.
+      schema:
+        type: string
+      in: path
+      required: true
+  /v1/api/users/{id}/password:
+    summary: Path user to change user password
+    description: The REST endpoint is used to update the password of the user with
+      the method `POST`.
+    post:
+      requestBody:
+        description: Change password request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+        required: true
+      tags:
+      - anyuser
+      - user
+      responses:
+        "202":
+          description: Success Response
+        "401":
+          $ref: '#/components/responses/UnAuthorized'
+      operationId: change-password
+      summary: Change Password
+      description: Change user password
+    parameters:
+    - name: id
+      description: user id
+      schema:
+        type: integer
+      in: path
+      required: true
+  /v1/api/users/{id}/status:
+    summary: Path user to change user status
+    description: The REST endpoint is used to update the status of the user with the
+      method `POST`.
+    post:
+      requestBody:
+        description: As a super user change user activate
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserStatusUpdate'
+        required: true
+      tags:
+      - superuser
+      - user
+      responses:
+        "200":
+          description: Success Response
+        "401":
+          $ref: '#/components/responses/UnAuthorized'
+        "403":
+          $ref: '#/components/responses/UnAuthorized'
+      operationId: update-user-status
+      summary: Update status
+      description: As a previledged user, update the status of other users.
+    parameters:
+    - name: id
+      description: user id
+      schema:
+        type: integer
+      in: path
+      required: true
+  /v1/api/users/recover/password:
+    summary: Path user to recover the password of a user
+    description: This path contains the APIs to recover the password of a user, in
+      the situation when the password is forgotten.
+    put:
+      requestBody:
+        description: Reset password request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserResetPassword'
+        required: true
+      tags:
+      - anonymous
+      - user
+      responses:
+        "200":
+          description: Success Response
+        "400":
+          $ref: '#/components/responses/UnAuthorized'
+      security:
+      - {}
+      operationId: reset-user-password
+      summary: Reset password, after recovery
+      description: Operation to reset password after a successful recovery attempt
+    post:
+      requestBody:
+        description: Initiate password request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRecoverPassword'
+        required: true
+      tags:
+      - anonymous
+      - user
+      responses:
+        "200":
+          description: Confirmation email sent
+      security:
+      - {}
+      operationId: initiate-password-recovery
+      summary: Initiate Password Recovery
+      description: Initiates password recover by sending a communication through prefered
+        communication channel
+  /v1/api/users/{id}:
+    summary: Path used to manage a single User.
+    description: The REST endpoint/path used to get, update, and delete single instances
+      of an `User`.  This path contains `GET`, `PUT`, and `DELETE` operations used
+      to perform the get, update, and delete tasks, respectively.
+    get:
+      tags:
+      - superuser
+      - anyuser
+      - user
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: Successful response - returns a single `User`.
+      operationId: getUser
+      summary: Get a User
+      description: Gets the details of a single instance of a `User`.
+    put:
+      requestBody:
+        description: Updated `User` information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      tags:
+      - superuser
+      - user
+      responses:
+        "202":
+          description: Successful response.
+      operationId: updateUser
+      summary: Update a User
+      description: Updates an existing `User`.
+    delete:
+      tags:
+      - superuser
+      - user
+      responses:
+        "204":
+          description: Successful response.
+      operationId: deleteUser
+      summary: Delete a User
+      description: Deletes an existing `User`.
+    parameters:
+    - name: id
+      description: A unique identifier for a `User`.
+      schema:
+        type: string
+      in: path
+      required: true
+  /v1/api/claims/{id}:
+    summary: Path used to manage a single Claim.
+    description: The REST endpoint/path used to get, update, and delete single instances
+      of an `Claim`.  This path contains `GET`, `PUT`, and `DELETE` operations used
+      to perform the get, update, and delete tasks, respectively.
+    get:
+      tags:
+      - superuser
+      - claim
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Claim'
+          description: Successful response - returns a single `Claim`.
+      operationId: getClaim
+      summary: Get a Claim
+      description: Gets the details of a single instance of a `Claim`.
+    put:
+      requestBody:
+        description: Updated `Claim` information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Claim'
+        required: true
+      tags:
+      - superuser
+      - claim
+      responses:
+        "202":
+          description: Successful response.
+      operationId: updateClaim
+      summary: Update a Claim
+      description: Updates an existing `Claim`.
+    delete:
+      tags:
+      - superuser
+      - claim
+      responses:
+        "204":
+          description: Successful response.
+      operationId: deleteClaim
+      summary: Delete a Claim
+      description: Deletes an existing `Claim`.
+    parameters:
+    - name: id
+      description: A unique identifier for a `Claim`.
+      schema:
+        type: string
+      in: path
+      required: true
+  /v1/api/clients/{id}/generate:
+    summary: Path used to manage credential of a single Client.
+    description: The REST endpoint/path used to generate client id and secret of single
+      instances of an `Client`.  This path contains `PUT` operation to perform the
+      refresh.
+    put:
+      requestBody:
+        description: No request body
+        required: false
+      tags:
+      - superuser
+      - client
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientCredentials'
+          description: Success Response
+      operationId: generate-secret
+      summary: Update a Client
+      description: Updates an existing `Client`.
+    parameters:
+    - name: id
+      description: A unique identifier for a `Client`.
+      schema:
+        type: string
+      in: path
+      required: true
+  /v1/api/scopes:
+    summary: Path used to manage the list of scopes.
+    description: The REST endpoint/path used to list and create zero or more `Scope`
+      entities.  This path contains a `GET` and `POST` operation to perform the list
+      and create tasks, respectively.
+    get:
+      tags:
+      - superuser
+      - scope
+      parameters:
+      - name: page_size
+        description: |-
+          Number of items in each page.
+          Default value is 10.
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: page_number
+        description: |-
+          Page number to return in response.
+          Starts with 1 and default value is 1 too.
+        schema:
+          type: integer
+        in: query
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Scope'
+          description: Successful response - returns an array of `Scope` entities.
+      operationId: getscopes
+      summary: List All scopes
+      description: Gets a list of all `Scope` entities.
+    post:
+      requestBody:
+        description: A new `Scope` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Scope'
+        required: true
+      tags:
+      - superuser
+      - scope
+      responses:
+        "201":
+          description: Successful response.
+      operationId: createScope
+      summary: Create a Scope
+      description: Creates a new instance of a `Scope`.
+  /v1/api/users:
+    summary: Path used to manage the list of users.
+    description: The REST endpoint/path used to list and create zero or more `User`
+      entities.  This path contains a `GET` and `POST` operation to perform the list
+      and create tasks, respectively.
+    get:
+      tags:
+      - superuser
+      - user
+      parameters:
+      - name: page_size
+        description: |-
+          Number of items in each page.
+          Default value is 10.
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: page_number
+        description: |-
+          Page number to return in response.
+          Starts with 1 and default value is 1 too.
+        schema:
+          type: integer
+        in: query
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSummaryPage'
+          description: Successful response - returns an array of `User` entities.
+      operationId: getusers
+      summary: List All users
+      description: Gets a list of all `User` entities.
+    post:
+      requestBody:
+        description: A new `User` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      tags:
+      - superuser
+      - user
+      responses:
+        "201":
+          description: Successful response.
+      operationId: createUser
+      summary: Create a User
+      description: Creates a new instance of a `User`.
+  /v1/api/claims:
+    summary: Path used to manage the list of claims.
+    description: The REST endpoint/path used to list and create zero or more `Claim`
+      entities.  This path contains a `GET` and `POST` operation to perform the list
+      and create tasks, respectively.
+    get:
+      tags:
+      - superuser
+      - claim
+      parameters:
+      - name: page_size
+        description: |-
+          Number of items in each page.
+          Default value is 10.
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: page_number
+        description: |-
+          Page number to return in response.
+          Starts with 1 and default value is 1 too.
+        schema:
+          type: integer
+        in: query
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClaimPage'
+          description: Successful response - returns an array of `Claim` entities.
+      operationId: getclaims
+      summary: List All claims
+      description: Gets a list of all `Claim` entities.
+    post:
+      requestBody:
+        description: A new `Claim` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Claim'
+        required: true
+      tags:
+      - superuser
+      - claim
+      responses:
+        "201":
+          description: Successful response.
+      operationId: createClaim
+      summary: Create a Claim
+      description: Creates a new instance of a `Claim`.
+components:
+  schemas:
+    UserSummary:
+      title: Root Type for UserSummary
+      description: A summary representation of user object
+      type: object
+      properties:
+        username:
+          description: Login username
+          type: string
+        email:
+          description: Email address
+          type: string
+        active:
+          description: User is active or inactive
+          type: boolean
+        blocked:
+          description: User is blocked by invalid attempt
+          type: boolean
+      example:
+        username: user1
+        email: user1@domain.com
+        active: true
+        blocked: false
+    UserSummaryPage:
+      description: A page of user summary
+      type: object
+      allOf:
+      - required:
+        - users
+        type: object
+        properties:
+          users:
+            description: A collection of users
+            type: array
+            items:
+              $ref: '#/components/schemas/UserSummary'
+      - $ref: '#/components/schemas/Page'
+      example:
+        users:
+        - username: some text
+          email: some text
+          active: true
+          blocked: true
+        - username: some text
+          email: some text
+          active: true
+          blocked: true
+        page_number: 54
+        page_total: 61
+    UserName:
+      title: Root Type for UserName
+      description: A username tontainer
+      type: object
+      properties:
+        given_name:
+          description: Given name(s) or first name(s) of the End-User. Note that in
+            some cultures, people can have multiple given names; all can be present,
+            with the names being separated by space characters.
+          type: string
+        family_name:
+          description: Surname(s) or last name(s) of the End-User. Note that in some
+            cultures, people can have multiple family names or no family name; all
+            can be present, with the names being separated by space characters.
+          type: string
+        name:
+          description: End-User's full name in displayable form including all name
+            parts, possibly including titles and suffixes, ordered according to the
+            End-User's locale and preferences.
+          type: string
+        middle_name:
+          description: Middle name(s) of the End-User. Note that in some cultures,
+            people can have multiple middle names; all can be present, with the names
+            being separated by space characters. Also note that in some cultures,
+            middle names are not used.
+          type: string
+        nickname:
+          description: Casual name of the End-User that may or may not be the same
+            as the given_name. For instance, a nickname value of Mike might be returned
+            alongside a given_name value of Michael.
+          type: string
+        preferred_username:
+          description: Shorthand name by which the End-User wishes to be referred
+            to at the RP, such as janedoe or j.doe. This value MAY be any valid JSON
+            string including special characters such as @, /, or whitespace. The RP
+            MUST NOT rely upon this value being unique.
+          type: string
+      example:
+        given_name: ""
+        surname: ""
+    Error:
+      description: An error response object
+      type: object
+      properties:
+        error:
+          description: Error code
+          type: string
+        description:
+          description: Detail description
+          type: string
+    ChangePasswordRequest:
+      description: A change password request object
+      required:
+      - old_password
+      - new_password
+      type: object
+      properties:
+        old_password:
+          format: password
+          description: The old or existing password
+          type: string
+        new_password:
+          format: password
+          description: The new password to set.
+          type: string
+    ClientSummary:
+      title: Root Type for ClientSummary
+      description: A summary object for client
+      type: object
+      properties:
+        client_id:
+          description: Client Id
+          type: string
+        name:
+          description: Client name
+          type: string
+        public:
+          description: Is it a public client
+          type: boolean
+      example:
+        client_id: hqjhbcjhwec
+        name: Example Client
+        public: false
+    ClientDetails:
+      description: A detail client representation
+      type: object
+      properties:
+        client_id:
+          description: Client ID
+          type: string
+        name:
+          description: Client name
+          type: string
+        description:
+          description: A description of the client
+          type: string
+      example:
+        client_id: some text
+        name: some text
+        description: some text
+    ClientSummaryPage:
+      title: Root Type for ClientSummaryPage
+      description: A page of client summary
+      type: object
+      allOf:
+      - type: object
+        properties:
+          clients:
+            description: A page of clients as queried with query parameter
+            type: array
+            items:
+              $ref: '#/components/schemas/ClientSummary'
+      - $ref: '#/components/schemas/Page'
+      example:
+        start: 39
+        total: 10
+        size: 62
+        clients:
+        - client_id: some text
+          name: some text
+          public: true
+        - client_id: some text
+          name: some text
+          public: true
+    Page:
+      description: ""
+      type: object
+      properties:
+        page_number:
+          format: int32
+          description: Page number of the response chunk
+          type: integer
+        page_total:
+          format: int32
+          description: Total available pages
+          type: integer
+    ScopePage:
+      description: ""
+      type: object
+      allOf:
+      - required:
+        - scopes
+        type: object
+        properties:
+          scopes:
+            description: An array of scopes as returned in search result or so.
+            type: array
+            items:
+              $ref: '#/components/schemas/Scope'
+      - $ref: '#/components/schemas/Page'
+    Client:
+      description: A client object representation
+      type: object
+    Scope:
+      description: A OAuth2 Scope
+      required:
+      - name
+      - id
+      type: object
+      properties:
+        name:
+          description: Scope name. alphanumeric characters only.
+          type: string
+        description:
+          description: A short dercription about the scope.
+          type: string
+        id:
+          description: Internal identifier of the scope
+          type: integer
+    User:
+      description: A detail user object information
+      type: object
+      allOf:
+      - required:
+        - username
+        type: object
+        properties:
+          username:
+            description: Username for login
+            type: string
+          address:
+            $ref: '#/components/schemas/UserAddress'
+            description: End-User's preferred postal address. The value of the address
+              member is a JSON [RFC4627] structure containing some or all of the members
+              defined in Section 5.1.1.
+          gender:
+            description: End-User's gender. Values defined by this specification are
+              female and male. Other values MAY be used when neither of the defined
+              values are applicable.
+            type: string
+          birthdate:
+            format: date
+            description: End-User's birthday, represented as an ISO 8601:2004 [ISO8601‑2004]
+              YYYY-MM-DD format. The year MAY be 0000, indicating that it is omitted.
+              To represent only the year, YYYY format is allowed. Note that depending
+              on the underlying platform's date related function, providing just year
+              can result in varying month and day, so the implementers need to take
+              this factor into account to correctly process the dates.
+            type: string
+          zoneinfo:
+            description: String from zoneinfo [zoneinfo] time zone database representing
+              the End-User's time zone. For example, Europe/Paris or America/Los_Angeles.
+            type: string
+          locale:
+            description: End-User's locale, represented as a BCP47 [RFC5646] language
+              tag. This is typically an ISO 639-1 Alpha-2 [ISO639‑1] language code
+              in lowercase and an ISO 3166-1 Alpha-2 [ISO3166‑1] country code in uppercase,
+              separated by a dash. For example, en-US or fr-CA. As a compatibility
+              note, some implementations have used an underscore as the separator
+              rather than a dash, for example, en_US; Relying Parties MAY choose to
+              accept this locale syntax as well.
+            type: string
+      - $ref: '#/components/schemas/UserName'
+      - $ref: '#/components/schemas/UserProfile'
+      - $ref: '#/components/schemas/UserContact'
+      - $ref: '#/components/schemas/UserAddress'
+    UserRecoverPassword:
+      description: A request obje to initiate password recovery
+      required:
+      - username
+      - email
+      type: object
+      properties:
+        username:
+          description: Username of the user
+          type: string
+        email:
+          description: Email id of the user to confirm with user store
+          type: string
+    UserResetPassword:
+      description: A reset password request
+      required:
+      - otp
+      - username
+      type: object
+      properties:
+        otp:
+          description: One time password received through initiation process
+          type: string
+        username:
+          description: Username of the user
+          type: string
+    UserUpdate:
+      description: A request object to update a user
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/UserName'
+          description: User's name
+    UserStatusUpdate:
+      description: A update status request
+      required:
+      - active
+      type: object
+      properties:
+        active:
+          description: New status to change to.
+          type: boolean
+    Claim:
+      description: A claim configuration object
+      required:
+      - name
+      - id
+      type: object
+      properties:
+        name:
+          description: A alphanumeric name, to represent claim name in OAuth2 claim.
+          type: string
+        description:
+          description: A short dercription about the claim.
+          type: string
+        id:
+          description: Internal identifier of the claim
+          type: integer
+    ClaimPage:
+      description: A page claims as response from API
+      type: object
+      allOf:
+      - required:
+        - claims
+        type: object
+        properties:
+          claims:
+            description: an array of claims
+            type: array
+            items:
+              $ref: '#/components/schemas/Claim'
+      - $ref: '#/components/schemas/Page'
+    ClientCredentials:
+      description: The credentials i.e. `client_id` and `client_secret`.
+      required:
+      - client_secret
+      - client_id
+      type: object
+      properties:
+        client_secret:
+          format: password
+          description: Client secret
+          type: string
+        client_id:
+          description: Client identifier
+          type: string
+    UserProfile:
+      description: An object representing user profile infos.
+      type: object
+      properties:
+        profile:
+          description: URL of the End-User's profile page. The contents of this Web
+            page SHOULD be about the End-User.
+          type: string
+        picture:
+          description: URL of the End-User's profile picture. This URL MUST refer
+            to an image file (for example, a PNG, JPEG, or GIF image file), rather
+            than to a Web page containing an image. Note that this URL SHOULD specifically
+            reference a profile photo of the End-User suitable for displaying when
+            describing the End-User, rather than an arbitrary photo taken by the End-User.
+          type: string
+        website:
+          description: URL of the End-User's Web page or blog. This Web page SHOULD
+            contain information published by the End-User or an organization that
+            the End-User is affiliated with.
+          type: string
+    UserAddress:
+      description: End-User's preferred postal address. The value of the address member
+        is a JSON [RFC4627] structure containing some or all of the members defined
+        in Section 5.1.1.
+      type: object
+      properties:
+        formatted:
+          description: Full mailing address, formatted for display or use on a mailing
+            label. This field MAY contain multiple lines, separated by newlines. Newlines
+            can be represented either as a carriage return/line feed pair ("\r\n")
+            or as a single line feed character ("\n").
+          type: string
+        street_address:
+          description: Full street address component, which MAY include house number,
+            street name, Post Office Box, and multi-line extended street address information.
+            This field MAY contain multiple lines, separated by newlines. Newlines
+            can be represented either as a carriage return/line feed pair ("\r\n")
+            or as a single line feed character ("\n").
+          type: string
+        locality:
+          description: City or locality component.
+          type: string
+        region:
+          description: State, province, prefecture, or region component.
+          type: string
+        country:
+          description: Country name component.
+          type: string
+        postal_code:
+          description: Zip code or postal code component.
+          type: string
+    UserContact:
+      description: User contact info
+      type: object
+      properties:
+        email_verified:
+          description: True if the End-User's e-mail address has been verified; otherwise
+            false. When this Claim Value is true, this means that the OP took affirmative
+            steps to ensure that this e-mail address was controlled by the End-User
+            at the time the verification was performed. The means by which an e-mail
+            address is verified is context-specific, and dependent upon the trust
+            framework or contractual agreements within which the parties are operating.
+          type: boolean
+        email:
+          description: End-User's preferred e-mail address. Its value MUST conform
+            to the RFC 5322 [RFC5322] addr-spec syntax. The RP MUST NOT rely upon
+            this value being unique, as discussed in Section 5.7.
+          type: string
+        phone_number_verified:
+          description: User at the time the verification was performed. The means
+            by which a phone number is verified is context-specific, and dependent
+            upon the trust framework or contractual agreements within which the parties
+            are operating. When true, the phone_number Claim MUST be in E.164 format
+            and any extensions MUST be represented in RFC 3966 format.
+          type: boolean
+        phone_number:
+          description: End-User's preferred telephone number. E.164 [E.164] is RECOMMENDED
+            as the format of this Claim, for example, +1 (425) 555-1212 or +56 (2)
+            687 2400. If the phone number contains an extension, it is RECOMMENDED
+            that the extension be represented using the RFC 3966 [RFC3966] extension
+            syntax, for example, +1 (604) 555-1234;ext=5678.
+          type: string
+  responses:
+    UnAuthorized:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Client is un authorized to access the request
+  securitySchemes:
+    OAuth:
+      scheme: bearer
+      type: http
+      description: This involed to aquire a user token from from cerberus itself.
+        Normally happens when you login to admin GUI.
+security:
+- OAuth: []
+tags:
+- name: user
+  description: User relater API
+- name: client
+  description: Client related API
+- name: scope
+  description: Scope related API
+- name: claim
+  description: Claim related API
+- name: anonymous
+  description: The operation is an anonymous operation
+- name: superuser
+  description: The operation is executed with the superuser context and permission
+- name: anyuser
+  description: The operation is executed with the user context and permission
