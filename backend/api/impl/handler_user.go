@@ -22,15 +22,15 @@ func (c CerberusAPI) ResetUserPassword(ctx echo.Context) error {
 	return ctx.String(http.StatusNotImplemented, "\"Not Implemented\"")
 }
 
-func (c CerberusAPI) DeleteUser(ctx echo.Context, id string) error {
+func (c CerberusAPI) DeleteUser(ctx echo.Context, id int) error {
 	return ctx.String(http.StatusNotImplemented, "\"Not Implemented\"")
 }
 
-func (c CerberusAPI) GetUser(ctx echo.Context, id string) error {
+func (c CerberusAPI) GetUser(ctx echo.Context, id int) error {
 	return ctx.String(http.StatusNotImplemented, "\"Not Implemented\"")
 }
 
-func (c CerberusAPI) UpdateUser(ctx echo.Context, id string) error {
+func (c CerberusAPI) UpdateUser(ctx echo.Context, id int) error {
 	return ctx.String(http.StatusNotImplemented, "\"Not Implemented\"")
 }
 

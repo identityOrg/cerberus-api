@@ -49,42 +49,6 @@ type ClaimPage struct {
 	Page
 }
 
-// Client defines model for Client.
-type Client map[string]interface{}
-
-// ClientCredentials defines model for ClientCredentials.
-type ClientCredentials struct {
-
-	// Client identifier
-	ClientId string `json:"client_id"`
-
-	// Client secret
-	ClientSecret string `json:"client_secret"`
-}
-
-// ClientSummary defines model for ClientSummary.
-type ClientSummary struct {
-
-	// Client Id
-	ClientId *string `json:"client_id,omitempty"`
-
-	// Client name
-	Name *string `json:"name,omitempty"`
-
-	// Is it a public client
-	Public *bool `json:"public,omitempty"`
-}
-
-// ClientSummaryPage defines model for ClientSummaryPage.
-type ClientSummaryPage struct {
-	// Embedded fields due to inline allOf schema
-
-	// A page of clients as queried with query parameter
-	Clients *[]ClientSummary `json:"clients,omitempty"`
-	// Embedded struct due to allOf(#/components/schemas/Page)
-	Page
-}
-
 // Error defines model for Error.
 type Error struct {
 
@@ -99,10 +63,10 @@ type Error struct {
 type Page struct {
 
 	// Page number of the response chunk
-	PageNumber *int32 `json:"page_number,omitempty"`
+	PageNumber int32 `json:"page_number"`
 
 	// Total available pages
-	PageTotal *int32 `json:"page_total,omitempty"`
+	PageTotal int32 `json:"page_total"`
 }
 
 // Scope defines model for Scope.
@@ -118,6 +82,65 @@ type Scope struct {
 	Name string `json:"name"`
 }
 
+// ServiceProvider defines model for ServiceProvider.
+type ServiceProvider struct {
+
+	// Kind of the application. The default, if omitted, is web. The defined values are native or web. Web Clients using the OAuth Implicit Grant Type MUST only register URLs using the https scheme as redirect_uris; they MUST NOT use localhost as the hostname. Native Clients MUST only register redirect_uris using custom URI schemes or URLs using the http: scheme with localhost as the hostname. Authorization Servers MAY place additional constraints on Native Clients. Authorization Servers MAY reject Redirection URI values using the http scheme, other than the localhost case for Native Clients. The Authorization Server MUST verify that all the registered redirect_uris conform to these constraints. This prevents sharing a Client ID across different types of Clients.
+	ApplicationType string `json:"application_type"`
+
+	// JSON array containing a list of the OAuth 2.0 Grant Types that the Client is declaring that it will restrict itself to using. The Grant Type values used by
+	//
+	// OpenID Connect are:
+	// 1. authorization_code: The Authorization Code Grant Type described in OAuth 2.0 Section 4.1.
+	// 1. implicit: The Implicit Grant Type described in OAuth 2.0 Section 4.2.
+	// 1. refresh_token: The Refresh Token Grant Type described in OAuth 2.0 Section 6.
+	//
+	// The following table lists the correspondence between response_type values that the Client will use and grant_type values that MUST be included in the registered grant_types list:
+	//
+	// 1. code: authorization_code
+	// 1. id_token: implicit
+	// 1. token id_token: implicit
+	// 1. code id_token: authorization_code, implicit
+	// 1. code token: authorization_code, implicit
+	// 1. code token id_token: authorization_code, implicit
+	//
+	// If omitted, the default is that the Client will use only the authorization_code Grant Type.
+	GrantTypes []string `json:"grant_types"`
+
+	// Name of the Client to be presented to the End-User. If desired, representation of this Claim in different languages and scripts is represented as described in Section 2.1.
+	Name *string `json:"name,omitempty"`
+
+	// Array of Redirection URI values used by the Client. One of these registered Redirection URI values MUST exactly match the redirect_uri parameter value used in each Authorization Request, with the matching performed as described in Section 6.2.1 of [RFC3986] (Simple String Comparison).
+	RedirectUris []string `json:"redirect_uris"`
+}
+
+// ServiceProviderCredentials defines model for ServiceProviderCredentials.
+type ServiceProviderCredentials struct {
+
+	// Client identifier
+	ClientId string `json:"client_id"`
+
+	// Client secret
+	ClientSecret string `json:"client_secret"`
+}
+
+// ServiceProviderSummary defines model for ServiceProviderSummary.
+type ServiceProviderSummary struct {
+
+	// Identifier of the provider.
+	Id int `json:"id"`
+}
+
+// ServiceProviderSummaryPage defines model for ServiceProviderSummaryPage.
+type ServiceProviderSummaryPage struct {
+	// Embedded fields due to inline allOf schema
+
+	// An array of service provider summary in one page.
+	ServiceProviders []ServiceProviderSummary `json:"service_providers"`
+	// Embedded struct due to allOf(#/components/schemas/Page)
+	Page
+}
+
 // User defines model for User.
 type User struct {
 	// Embedded fields due to inline allOf schema
@@ -130,6 +153,9 @@ type User struct {
 
 	// End-User's gender. Values defined by this specification are female and male. Other values MAY be used when neither of the defined values are applicable.
 	Gender *string `json:"gender,omitempty"`
+
+	// User identifier.
+	Id int `json:"id"`
 
 	// End-User's locale, represented as a BCP47 [RFC5646] language tag. This is typically an ISO 639-1 Alpha-2 [ISO639‑1] language code in lowercase and an ISO 3166-1 Alpha-2 [ISO3166‑1] country code in uppercase, separated by a dash. For example, en-US or fr-CA. As a compatibility note, some implementations have used an underscore as the separator rather than a dash, for example, en_US; Relying Parties MAY choose to accept this locale syntax as well.
 	Locale *string `json:"locale,omitempty"`
@@ -296,24 +322,6 @@ type CreateClaimJSONBody Claim
 // UpdateClaimJSONBody defines parameters for UpdateClaim.
 type UpdateClaimJSONBody Claim
 
-// GetClientsParams defines parameters for GetClients.
-type GetClientsParams struct {
-
-	// Number of items in each page.
-	// Default value is 10.
-	PageSize *int `json:"page_size,omitempty"`
-
-	// Page number to return in response.
-	// Starts with 1 and default value is 1 too.
-	PageNumber *int `json:"page_number,omitempty"`
-}
-
-// CreateClientJSONBody defines parameters for CreateClient.
-type CreateClientJSONBody Client
-
-// UpdateClientJSONBody defines parameters for UpdateClient.
-type UpdateClientJSONBody Client
-
 // GetScopesParams defines parameters for GetScopes.
 type GetScopesParams struct {
 
@@ -331,6 +339,31 @@ type CreateScopeJSONBody Scope
 
 // UpdateScopeJSONBody defines parameters for UpdateScope.
 type UpdateScopeJSONBody Scope
+
+// GetServiceProvidersParams defines parameters for GetServiceProviders.
+type GetServiceProvidersParams struct {
+
+	// Number of items in each page.
+	// Default value is 10.
+	PageSize *int `json:"page_size,omitempty"`
+
+	// Page number to return in response.
+	// Starts with 1 and default value is 1 too.
+	PageNumber *int `json:"page_number,omitempty"`
+}
+
+// CreateServiceProviderJSONBody defines parameters for CreateServiceProvider.
+type CreateServiceProviderJSONBody ServiceProvider
+
+// UpdateServiceProviderJSONBody defines parameters for UpdateServiceProvider.
+type UpdateServiceProviderJSONBody ServiceProvider
+
+// GenerateCredentialsParams defines parameters for GenerateCredentials.
+type GenerateCredentialsParams struct {
+
+	// Indicates wheather to refresh the client_id of not. Default is `false`.
+	RefreshId *bool `json:"refresh_id,omitempty"`
+}
 
 // GetUsersParams defines parameters for GetUsers.
 type GetUsersParams struct {
@@ -368,17 +401,17 @@ type CreateClaimJSONRequestBody CreateClaimJSONBody
 // UpdateClaimRequestBody defines body for UpdateClaim for application/json ContentType.
 type UpdateClaimJSONRequestBody UpdateClaimJSONBody
 
-// CreateClientRequestBody defines body for CreateClient for application/json ContentType.
-type CreateClientJSONRequestBody CreateClientJSONBody
-
-// UpdateClientRequestBody defines body for UpdateClient for application/json ContentType.
-type UpdateClientJSONRequestBody UpdateClientJSONBody
-
 // CreateScopeRequestBody defines body for CreateScope for application/json ContentType.
 type CreateScopeJSONRequestBody CreateScopeJSONBody
 
 // UpdateScopeRequestBody defines body for UpdateScope for application/json ContentType.
 type UpdateScopeJSONRequestBody UpdateScopeJSONBody
+
+// CreateServiceProviderRequestBody defines body for CreateServiceProvider for application/json ContentType.
+type CreateServiceProviderJSONRequestBody CreateServiceProviderJSONBody
+
+// UpdateServiceProviderRequestBody defines body for UpdateServiceProvider for application/json ContentType.
+type UpdateServiceProviderJSONRequestBody UpdateServiceProviderJSONBody
 
 // CreateUserRequestBody defines body for CreateUser for application/json ContentType.
 type CreateUserJSONRequestBody CreateUserJSONBody
@@ -408,31 +441,13 @@ type ServerInterface interface {
 	CreateClaim(ctx echo.Context) error
 	// Delete a Claim
 	// (DELETE /v1/api/claims/{id})
-	DeleteClaim(ctx echo.Context, id string) error
+	DeleteClaim(ctx echo.Context, id int) error
 	// Get a Claim
 	// (GET /v1/api/claims/{id})
-	GetClaim(ctx echo.Context, id string) error
+	GetClaim(ctx echo.Context, id int) error
 	// Update a Claim
 	// (PUT /v1/api/claims/{id})
-	UpdateClaim(ctx echo.Context, id string) error
-	// List All clients
-	// (GET /v1/api/clients)
-	GetClients(ctx echo.Context, params GetClientsParams) error
-	// Create a Client
-	// (POST /v1/api/clients)
-	CreateClient(ctx echo.Context) error
-	// Delete a Client
-	// (DELETE /v1/api/clients/{id})
-	DeleteClient(ctx echo.Context, id string) error
-	// Get a Client
-	// (GET /v1/api/clients/{id})
-	GetClient(ctx echo.Context, id string) error
-	// Update a Client
-	// (PUT /v1/api/clients/{id})
-	UpdateClient(ctx echo.Context, id string) error
-	// Update a Client
-	// (PUT /v1/api/clients/{id}/generate)
-	GenerateSecret(ctx echo.Context, id string) error
+	UpdateClaim(ctx echo.Context, id int) error
 	// List All scopes
 	// (GET /v1/api/scopes)
 	GetScopes(ctx echo.Context, params GetScopesParams) error
@@ -441,13 +456,34 @@ type ServerInterface interface {
 	CreateScope(ctx echo.Context) error
 	// Delete a Scope
 	// (DELETE /v1/api/scopes/{id})
-	DeleteScope(ctx echo.Context, id string) error
+	DeleteScope(ctx echo.Context, id int) error
 	// Get a Scope
 	// (GET /v1/api/scopes/{id})
-	GetScope(ctx echo.Context, id string) error
+	GetScope(ctx echo.Context, id int) error
 	// Update a Scope
 	// (PUT /v1/api/scopes/{id})
-	UpdateScope(ctx echo.Context, id string) error
+	UpdateScope(ctx echo.Context, id int) error
+	// List All serviceproviders
+	// (GET /v1/api/serviceproviders)
+	GetServiceProviders(ctx echo.Context, params GetServiceProvidersParams) error
+	// Create a ServiceProvider
+	// (POST /v1/api/serviceproviders)
+	CreateServiceProvider(ctx echo.Context) error
+	// Delete a ServiceProvider
+	// (DELETE /v1/api/serviceproviders/{id})
+	DeleteServiceProvider(ctx echo.Context, id int) error
+	// Get a ServiceProvider
+	// (GET /v1/api/serviceproviders/{id})
+	GetServiceProvider(ctx echo.Context, id int) error
+	// Update a ServiceProvider
+	// (PUT /v1/api/serviceproviders/{id})
+	UpdateServiceProvider(ctx echo.Context, id int) error
+	// Retrieves the existing credentials
+	// (GET /v1/api/serviceproviders/{id}/credentials)
+	GetCredentials(ctx echo.Context, id int) error
+	// Update a Client
+	// (PUT /v1/api/serviceproviders/{id}/credentials)
+	GenerateCredentials(ctx echo.Context, id int, params GenerateCredentialsParams) error
 	// List All users
 	// (GET /v1/api/users)
 	GetUsers(ctx echo.Context, params GetUsersParams) error
@@ -462,13 +498,13 @@ type ServerInterface interface {
 	ResetUserPassword(ctx echo.Context) error
 	// Delete a User
 	// (DELETE /v1/api/users/{id})
-	DeleteUser(ctx echo.Context, id string) error
+	DeleteUser(ctx echo.Context, id int) error
 	// Get a User
 	// (GET /v1/api/users/{id})
-	GetUser(ctx echo.Context, id string) error
+	GetUser(ctx echo.Context, id int) error
 	// Update a User
 	// (PUT /v1/api/users/{id})
-	UpdateUser(ctx echo.Context, id string) error
+	UpdateUser(ctx echo.Context, id int) error
 	// Change Password
 	// (POST /v1/api/users/{id}/password)
 	ChangeUserPassword(ctx echo.Context, id int) error
@@ -524,7 +560,7 @@ func (w *ServerInterfaceWrapper) CreateClaim(ctx echo.Context) error {
 func (w *ServerInterfaceWrapper) DeleteClaim(ctx echo.Context) error {
 	var err error
 	// ------------- Path parameter "id" -------------
-	var id string
+	var id int
 
 	err = runtime.BindStyledParameter("simple", false, "id", ctx.Param("id"), &id)
 	if err != nil {
@@ -542,7 +578,7 @@ func (w *ServerInterfaceWrapper) DeleteClaim(ctx echo.Context) error {
 func (w *ServerInterfaceWrapper) GetClaim(ctx echo.Context) error {
 	var err error
 	// ------------- Path parameter "id" -------------
-	var id string
+	var id int
 
 	err = runtime.BindStyledParameter("simple", false, "id", ctx.Param("id"), &id)
 	if err != nil {
@@ -560,7 +596,7 @@ func (w *ServerInterfaceWrapper) GetClaim(ctx echo.Context) error {
 func (w *ServerInterfaceWrapper) UpdateClaim(ctx echo.Context) error {
 	var err error
 	// ------------- Path parameter "id" -------------
-	var id string
+	var id int
 
 	err = runtime.BindStyledParameter("simple", false, "id", ctx.Param("id"), &id)
 	if err != nil {
@@ -571,116 +607,6 @@ func (w *ServerInterfaceWrapper) UpdateClaim(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.UpdateClaim(ctx, id)
-	return err
-}
-
-// GetClients converts echo context to params.
-func (w *ServerInterfaceWrapper) GetClients(ctx echo.Context) error {
-	var err error
-
-	ctx.Set("OAuth.Scopes", []string{""})
-
-	// Parameter object where we will unmarshal all parameters from the context
-	var params GetClientsParams
-	// ------------- Optional query parameter "page_size" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "page_size", ctx.QueryParams(), &params.PageSize)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter page_size: %s", err))
-	}
-
-	// ------------- Optional query parameter "page_number" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "page_number", ctx.QueryParams(), &params.PageNumber)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter page_number: %s", err))
-	}
-
-	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.GetClients(ctx, params)
-	return err
-}
-
-// CreateClient converts echo context to params.
-func (w *ServerInterfaceWrapper) CreateClient(ctx echo.Context) error {
-	var err error
-
-	ctx.Set("OAuth.Scopes", []string{""})
-
-	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.CreateClient(ctx)
-	return err
-}
-
-// DeleteClient converts echo context to params.
-func (w *ServerInterfaceWrapper) DeleteClient(ctx echo.Context) error {
-	var err error
-	// ------------- Path parameter "id" -------------
-	var id string
-
-	err = runtime.BindStyledParameter("simple", false, "id", ctx.Param("id"), &id)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter id: %s", err))
-	}
-
-	ctx.Set("OAuth.Scopes", []string{""})
-
-	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.DeleteClient(ctx, id)
-	return err
-}
-
-// GetClient converts echo context to params.
-func (w *ServerInterfaceWrapper) GetClient(ctx echo.Context) error {
-	var err error
-	// ------------- Path parameter "id" -------------
-	var id string
-
-	err = runtime.BindStyledParameter("simple", false, "id", ctx.Param("id"), &id)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter id: %s", err))
-	}
-
-	ctx.Set("OAuth.Scopes", []string{""})
-
-	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.GetClient(ctx, id)
-	return err
-}
-
-// UpdateClient converts echo context to params.
-func (w *ServerInterfaceWrapper) UpdateClient(ctx echo.Context) error {
-	var err error
-	// ------------- Path parameter "id" -------------
-	var id string
-
-	err = runtime.BindStyledParameter("simple", false, "id", ctx.Param("id"), &id)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter id: %s", err))
-	}
-
-	ctx.Set("OAuth.Scopes", []string{""})
-
-	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.UpdateClient(ctx, id)
-	return err
-}
-
-// GenerateSecret converts echo context to params.
-func (w *ServerInterfaceWrapper) GenerateSecret(ctx echo.Context) error {
-	var err error
-	// ------------- Path parameter "id" -------------
-	var id string
-
-	err = runtime.BindStyledParameter("simple", false, "id", ctx.Param("id"), &id)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter id: %s", err))
-	}
-
-	ctx.Set("OAuth.Scopes", []string{""})
-
-	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.GenerateSecret(ctx, id)
 	return err
 }
 
@@ -726,7 +652,7 @@ func (w *ServerInterfaceWrapper) CreateScope(ctx echo.Context) error {
 func (w *ServerInterfaceWrapper) DeleteScope(ctx echo.Context) error {
 	var err error
 	// ------------- Path parameter "id" -------------
-	var id string
+	var id int
 
 	err = runtime.BindStyledParameter("simple", false, "id", ctx.Param("id"), &id)
 	if err != nil {
@@ -744,7 +670,7 @@ func (w *ServerInterfaceWrapper) DeleteScope(ctx echo.Context) error {
 func (w *ServerInterfaceWrapper) GetScope(ctx echo.Context) error {
 	var err error
 	// ------------- Path parameter "id" -------------
-	var id string
+	var id int
 
 	err = runtime.BindStyledParameter("simple", false, "id", ctx.Param("id"), &id)
 	if err != nil {
@@ -762,7 +688,7 @@ func (w *ServerInterfaceWrapper) GetScope(ctx echo.Context) error {
 func (w *ServerInterfaceWrapper) UpdateScope(ctx echo.Context) error {
 	var err error
 	// ------------- Path parameter "id" -------------
-	var id string
+	var id int
 
 	err = runtime.BindStyledParameter("simple", false, "id", ctx.Param("id"), &id)
 	if err != nil {
@@ -773,6 +699,143 @@ func (w *ServerInterfaceWrapper) UpdateScope(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.UpdateScope(ctx, id)
+	return err
+}
+
+// GetServiceProviders converts echo context to params.
+func (w *ServerInterfaceWrapper) GetServiceProviders(ctx echo.Context) error {
+	var err error
+
+	ctx.Set("OAuth.Scopes", []string{""})
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetServiceProvidersParams
+	// ------------- Optional query parameter "page_size" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "page_size", ctx.QueryParams(), &params.PageSize)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter page_size: %s", err))
+	}
+
+	// ------------- Optional query parameter "page_number" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "page_number", ctx.QueryParams(), &params.PageNumber)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter page_number: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetServiceProviders(ctx, params)
+	return err
+}
+
+// CreateServiceProvider converts echo context to params.
+func (w *ServerInterfaceWrapper) CreateServiceProvider(ctx echo.Context) error {
+	var err error
+
+	ctx.Set("OAuth.Scopes", []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.CreateServiceProvider(ctx)
+	return err
+}
+
+// DeleteServiceProvider converts echo context to params.
+func (w *ServerInterfaceWrapper) DeleteServiceProvider(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "id" -------------
+	var id int
+
+	err = runtime.BindStyledParameter("simple", false, "id", ctx.Param("id"), &id)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter id: %s", err))
+	}
+
+	ctx.Set("OAuth.Scopes", []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.DeleteServiceProvider(ctx, id)
+	return err
+}
+
+// GetServiceProvider converts echo context to params.
+func (w *ServerInterfaceWrapper) GetServiceProvider(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "id" -------------
+	var id int
+
+	err = runtime.BindStyledParameter("simple", false, "id", ctx.Param("id"), &id)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter id: %s", err))
+	}
+
+	ctx.Set("OAuth.Scopes", []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetServiceProvider(ctx, id)
+	return err
+}
+
+// UpdateServiceProvider converts echo context to params.
+func (w *ServerInterfaceWrapper) UpdateServiceProvider(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "id" -------------
+	var id int
+
+	err = runtime.BindStyledParameter("simple", false, "id", ctx.Param("id"), &id)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter id: %s", err))
+	}
+
+	ctx.Set("OAuth.Scopes", []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.UpdateServiceProvider(ctx, id)
+	return err
+}
+
+// GetCredentials converts echo context to params.
+func (w *ServerInterfaceWrapper) GetCredentials(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "id" -------------
+	var id int
+
+	err = runtime.BindStyledParameter("simple", false, "id", ctx.Param("id"), &id)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter id: %s", err))
+	}
+
+	ctx.Set("OAuth.Scopes", []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetCredentials(ctx, id)
+	return err
+}
+
+// GenerateCredentials converts echo context to params.
+func (w *ServerInterfaceWrapper) GenerateCredentials(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "id" -------------
+	var id int
+
+	err = runtime.BindStyledParameter("simple", false, "id", ctx.Param("id"), &id)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter id: %s", err))
+	}
+
+	ctx.Set("OAuth.Scopes", []string{""})
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GenerateCredentialsParams
+	// ------------- Optional query parameter "refresh_id" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "refresh_id", ctx.QueryParams(), &params.RefreshId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter refresh_id: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GenerateCredentials(ctx, id, params)
 	return err
 }
 
@@ -836,7 +899,7 @@ func (w *ServerInterfaceWrapper) ResetUserPassword(ctx echo.Context) error {
 func (w *ServerInterfaceWrapper) DeleteUser(ctx echo.Context) error {
 	var err error
 	// ------------- Path parameter "id" -------------
-	var id string
+	var id int
 
 	err = runtime.BindStyledParameter("simple", false, "id", ctx.Param("id"), &id)
 	if err != nil {
@@ -854,7 +917,7 @@ func (w *ServerInterfaceWrapper) DeleteUser(ctx echo.Context) error {
 func (w *ServerInterfaceWrapper) GetUser(ctx echo.Context) error {
 	var err error
 	// ------------- Path parameter "id" -------------
-	var id string
+	var id int
 
 	err = runtime.BindStyledParameter("simple", false, "id", ctx.Param("id"), &id)
 	if err != nil {
@@ -872,7 +935,7 @@ func (w *ServerInterfaceWrapper) GetUser(ctx echo.Context) error {
 func (w *ServerInterfaceWrapper) UpdateUser(ctx echo.Context) error {
 	var err error
 	// ------------- Path parameter "id" -------------
-	var id string
+	var id int
 
 	err = runtime.BindStyledParameter("simple", false, "id", ctx.Param("id"), &id)
 	if err != nil {
@@ -949,17 +1012,18 @@ func RegisterHandlers(router EchoRouter, si ServerInterface) {
 	router.DELETE("/v1/api/claims/:id", wrapper.DeleteClaim)
 	router.GET("/v1/api/claims/:id", wrapper.GetClaim)
 	router.PUT("/v1/api/claims/:id", wrapper.UpdateClaim)
-	router.GET("/v1/api/clients", wrapper.GetClients)
-	router.POST("/v1/api/clients", wrapper.CreateClient)
-	router.DELETE("/v1/api/clients/:id", wrapper.DeleteClient)
-	router.GET("/v1/api/clients/:id", wrapper.GetClient)
-	router.PUT("/v1/api/clients/:id", wrapper.UpdateClient)
-	router.PUT("/v1/api/clients/:id/generate", wrapper.GenerateSecret)
 	router.GET("/v1/api/scopes", wrapper.GetScopes)
 	router.POST("/v1/api/scopes", wrapper.CreateScope)
 	router.DELETE("/v1/api/scopes/:id", wrapper.DeleteScope)
 	router.GET("/v1/api/scopes/:id", wrapper.GetScope)
 	router.PUT("/v1/api/scopes/:id", wrapper.UpdateScope)
+	router.GET("/v1/api/serviceproviders", wrapper.GetServiceProviders)
+	router.POST("/v1/api/serviceproviders", wrapper.CreateServiceProvider)
+	router.DELETE("/v1/api/serviceproviders/:id", wrapper.DeleteServiceProvider)
+	router.GET("/v1/api/serviceproviders/:id", wrapper.GetServiceProvider)
+	router.PUT("/v1/api/serviceproviders/:id", wrapper.UpdateServiceProvider)
+	router.GET("/v1/api/serviceproviders/:id/credentials", wrapper.GetCredentials)
+	router.PUT("/v1/api/serviceproviders/:id/credentials", wrapper.GenerateCredentials)
 	router.GET("/v1/api/users", wrapper.GetUsers)
 	router.POST("/v1/api/users", wrapper.CreateUser)
 	router.POST("/v1/api/users/recover/password", wrapper.InitiatePasswordRecovery)
@@ -975,98 +1039,111 @@ func RegisterHandlers(router EchoRouter, si ServerInterface) {
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
-	"KWkAAA==",
+	"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",
+	"rYEqt3jvYZaOcHX33wEAAP//qw8NcRF2AAA=",
 }
 
 // GetSwagger returns the Swagger specification corresponding to the generated code

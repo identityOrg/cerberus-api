@@ -1,7 +1,6 @@
 package setup
 
 import (
-	"github.com/deepmap/oapi-codegen/pkg/middleware"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/identityOrg/cerberus-api/backend/api"
 	"github.com/identityOrg/cerberus-api/backend/api/impl"
@@ -20,7 +19,6 @@ func init() {
 }
 
 func RegisterAllAPIs(e *echo.Echo) {
-	e.Use(middleware.OapiRequestValidator(swagger))
 	apiImpl := impl.CerberusAPI{}
 	api.RegisterHandlers(e, apiImpl)
 	e.GET("/v1/spec", respondApiSpec)

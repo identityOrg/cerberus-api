@@ -17,15 +17,15 @@ func (c CerberusAPI) CreateClaim(ctx echo.Context) error {
 	return ctx.String(http.StatusNotImplemented, "\"Not Implemented\"")
 }
 
-func (c CerberusAPI) DeleteClaim(ctx echo.Context, id string) error {
+func (c CerberusAPI) DeleteClaim(ctx echo.Context, id int) error {
 	return ctx.String(http.StatusNotImplemented, "\"Not Implemented\"")
 }
 
-func (c CerberusAPI) GetClaim(ctx echo.Context, id string) error {
+func (c CerberusAPI) GetClaim(ctx echo.Context, id int) error {
 	return ctx.String(http.StatusNotImplemented, "\"Not Implemented\"")
 }
 
-func (c CerberusAPI) UpdateClaim(ctx echo.Context, id string) error {
+func (c CerberusAPI) UpdateClaim(ctx echo.Context, id int) error {
 	return ctx.String(http.StatusNotImplemented, "\"Not Implemented\"")
 }
 
@@ -37,14 +37,14 @@ func (c CerberusAPI) CreateScope(ctx echo.Context) error {
 	return ctx.String(http.StatusNotImplemented, "\"Not Implemented\"")
 }
 
-func (c CerberusAPI) DeleteScope(ctx echo.Context, id string) error {
+func (c CerberusAPI) DeleteScope(ctx echo.Context, id int) error {
 	return ctx.String(http.StatusNotImplemented, "\"Not Implemented\"")
 }
 
-func (c CerberusAPI) GetScope(ctx echo.Context, id string) error {
+func (c CerberusAPI) GetScope(ctx echo.Context, id int) error {
 	return ctx.String(http.StatusNotImplemented, "\"Not Implemented\"")
 }
 
-func (c CerberusAPI) UpdateScope(ctx echo.Context, id string) error {
+func (c CerberusAPI) UpdateScope(ctx echo.Context, id int) error {
 	return ctx.String(http.StatusNotImplemented, "\"Not Implemented\"")
 }
