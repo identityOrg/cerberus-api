@@ -13,112 +13,6 @@ info:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0
 paths:
-  /v1/api/clients/{id}:
-    summary: Path used to manage a single Client.
-    description: The REST endpoint/path used to get, update, and delete single instances
-      of an `Client`.  This path contains `GET`, `PUT`, and `DELETE` operations used
-      to perform the get, update, and delete tasks, respectively.
-    get:
-      tags:
-      - superuser
-      - client
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Client'
-          description: Successful response - returns a single `Client`.
-      operationId: get-client
-      summary: Get a Client
-      description: Gets the details of a single instance of a `Client`.
-    put:
-      requestBody:
-        description: Updated `Client` information.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Client'
-        required: true
-      tags:
-      - superuser
-      - client
-      responses:
-        "202":
-          description: Successful response.
-      operationId: update-client
-      summary: Update a Client
-      description: Updates an existing `Client`.
-    delete:
-      tags:
-      - superuser
-      - client
-      responses:
-        "204":
-          description: Successful response.
-      operationId: delete-client
-      summary: Delete a Client
-      description: Deletes an existing `Client`.
-    parameters:
-    - name: id
-      description: A unique identifier for a `Client`.
-      schema:
-        type: string
-      in: path
-      required: true
-  /v1/api/clients:
-    summary: Path used to manage the list of clients.
-    description: The REST endpoint/path used to list and create zero or more `Client`
-      entities.  This path contains a `GET` and `POST` operation to perform the list
-      and create tasks, respectively.
-    get:
-      tags:
-      - superuser
-      - client
-      parameters:
-      - name: page_size
-        description: |-
-          Number of items in each page.
-          Default value is 10.
-        schema:
-          type: integer
-        in: query
-        required: false
-      - name: page_number
-        description: |-
-          Page number to return in response.
-          Starts with 1 and default value is 1 too.
-        schema:
-          type: integer
-        in: query
-        required: false
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ClientSummaryPage'
-          description: Successful response - returns an array of `Client` entities.
-      operationId: get-clients
-      summary: List All clients
-      description: Gets a list of all `Client` entities.
-    post:
-      requestBody:
-        description: A new `Client` to be created.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Client'
-        required: true
-      tags:
-      - superuser
-      - client
-      responses:
-        "201":
-          description: Successful response.
-      operationId: create-client
-      summary: Create a Client
-      description: Creates a new instance of a `Client`.
   /v1/api/scopes/{id}:
     summary: Path used to manage a single Scope.
     description: The REST endpoint/path used to get, update, and delete single instances
@@ -169,7 +63,7 @@ paths:
     - name: id
       description: A unique identifier for a `Scope`.
       schema:
-        type: string
+        type: integer
       in: path
       required: true
   /v1/api/users/{id}/password:
@@ -330,7 +224,7 @@ paths:
     - name: id
       description: A unique identifier for a `User`.
       schema:
-        type: string
+        type: integer
       in: path
       required: true
   /v1/api/claims/{id}:
@@ -383,36 +277,7 @@ paths:
     - name: id
       description: A unique identifier for a `Claim`.
       schema:
-        type: string
-      in: path
-      required: true
-  /v1/api/clients/{id}/generate:
-    summary: Path used to manage credential of a single Client.
-    description: The REST endpoint/path used to generate client id and secret of single
-      instances of an `Client`.  This path contains `PUT` operation to perform the
-      refresh.
-    put:
-      requestBody:
-        description: No request body
-        required: false
-      tags:
-      - superuser
-      - client
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ClientCredentials'
-          description: Success Response
-      operationId: generate-secret
-      summary: Update a Client
-      description: Updates an existing `Client`.
-    parameters:
-    - name: id
-      description: A unique identifier for a `Client`.
-      schema:
-        type: string
+        type: integer
       in: path
       required: true
   /v1/api/scopes:
@@ -576,6 +441,149 @@ paths:
       operationId: create-claim
       summary: Create a Claim
       description: Creates a new instance of a `Claim`.
+  /v1/api/serviceproviders:
+    summary: Path used to manage the list of serviceproviders.
+    description: The REST endpoint/path used to list and create zero or more `ServiceProvider`
+      entities.  This path contains a `GET` and `POST` operation to perform the list
+      and create tasks, respectively.
+    get:
+      tags:
+      - service-provider
+      - superuser
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ServiceProvider'
+          description: Successful response - returns an array of `ServiceProvider`
+            entities.
+      operationId: getserviceproviders
+      summary: List All serviceproviders
+      description: Gets a list of all `ServiceProvider` entities.
+    post:
+      requestBody:
+        description: A new `ServiceProvider` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceProvider'
+        required: true
+      tags:
+      - service-provider
+      - superuser
+      responses:
+        "201":
+          description: Successful response.
+      operationId: createServiceProvider
+      summary: Create a ServiceProvider
+      description: Creates a new instance of a `ServiceProvider`.
+  /v1/api/serviceproviders/{id}:
+    summary: Path used to manage a single ServiceProvider.
+    description: The REST endpoint/path used to get, update, and delete single instances
+      of an `ServiceProvider`.  This path contains `GET`, `PUT`, and `DELETE` operations
+      used to perform the get, update, and delete tasks, respectively.
+    get:
+      tags:
+      - service-provider
+      - superuser
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceProvider'
+          description: Successful response - returns a single `ServiceProvider`.
+      operationId: getServiceProvider
+      summary: Get a ServiceProvider
+      description: Gets the details of a single instance of a `ServiceProvider`.
+    put:
+      requestBody:
+        description: Updated `ServiceProvider` information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceProvider'
+        required: true
+      tags:
+      - service-provider
+      - superuser
+      responses:
+        "202":
+          description: Successful response.
+      operationId: updateServiceProvider
+      summary: Update a ServiceProvider
+      description: Updates an existing `ServiceProvider`.
+    delete:
+      tags:
+      - service-provider
+      - superuser
+      responses:
+        "204":
+          description: Successful response.
+      operationId: deleteServiceProvider
+      summary: Delete a ServiceProvider
+      description: Deletes an existing `ServiceProvider`.
+    parameters:
+    - name: id
+      description: A unique identifier for a `ServiceProvider`.
+      schema:
+        type: integer
+      in: path
+      required: true
+  /v1/api/serviceproviders/{id}/credentials:
+    summary: Path used to manage credential of a single Client.
+    description: The REST endpoint/path used to generate client id and secret of single
+      instances of an `Client`.  This path contains `PUT` operation to perform the
+      refresh.
+    get:
+      tags:
+      - service-provider
+      - superuser
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceProviderCredentials'
+          description: Seccess Response
+      operationId: get-credentials
+      summary: Retrieves the existing credentials
+      description: This API retrieves the existing credentials as the service provider
+        has. This API can noly be called for a private service provider.
+    put:
+      requestBody:
+        description: No request body
+        required: false
+      tags:
+      - superuser
+      - service-provider
+      parameters:
+      - name: refresh_id
+        description: Indicates wheather to refresh the client_id of not. Default is
+          `false`.
+        schema:
+          type: boolean
+        in: query
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceProviderCredentials'
+          description: Success Response
+      operationId: generate-credentials
+      summary: Update a Client
+      description: Updates an existing `Client`.
+    parameters:
+    - name: id
+      description: A unique identifier for a `Client`.
+      schema:
+        type: integer
+      in: path
+      required: true
 components:
   schemas:
     UserSummary:
@@ -691,67 +699,11 @@ components:
           format: password
           description: The new password to set.
           type: string
-    ClientSummary:
-      title: Root Type for ClientSummary
-      description: A summary object for client
-      type: object
-      properties:
-        client_id:
-          description: Client Id
-          type: string
-        name:
-          description: Client name
-          type: string
-        public:
-          description: Is it a public client
-          type: boolean
-      example:
-        client_id: hqjhbcjhwec
-        name: Example Client
-        public: false
-    ClientDetails:
-      description: A detail client representation
-      type: object
-      properties:
-        client_id:
-          description: Client ID
-          type: string
-        name:
-          description: Client name
-          type: string
-        description:
-          description: A description of the client
-          type: string
-      example:
-        client_id: some text
-        name: some text
-        description: some text
-    ClientSummaryPage:
-      title: Root Type for ClientSummaryPage
-      description: A page of client summary
-      type: object
-      allOf:
-      - type: object
-        properties:
-          clients:
-            description: A page of clients as queried with query parameter
-            type: array
-            items:
-              $ref: '#/components/schemas/ClientSummary'
-      - $ref: '#/components/schemas/Page'
-      example:
-        start: 39
-        total: 10
-        size: 62
-        clients:
-        - client_id: some text
-          name: some text
-          public: true
-        - client_id: some text
-          name: some text
-          public: true
     Page:
       description: ""
+      required:
+      - page_number
+      - page_total
       type: object
       properties:
         page_number:
@@ -776,9 +728,6 @@ components:
             items:
               $ref: '#/components/schemas/Scope'
       - $ref: '#/components/schemas/Page'
-    Client:
-      description: A client object representation
-      type: object
     Scope:
       description: A OAuth2 Scope
       required:
@@ -801,6 +750,7 @@ components:
       allOf:
       - required:
         - username
+        - id
         type: object
         properties:
           username:
@@ -838,6 +788,9 @@ components:
               rather than a dash, for example, en_US; Relying Parties MAY choose to
               accept this locale syntax as well.
             type: string
+          id:
+            description: User identifier.
+            type: integer
       - $ref: '#/components/schemas/UserName'
       - $ref: '#/components/schemas/UserProfile'
       - $ref: '#/components/schemas/UserContact'
@@ -914,20 +867,6 @@ components:
             items:
               $ref: '#/components/schemas/Claim'
       - $ref: '#/components/schemas/Page'
-    ClientCredentials:
-      description: The credentials i.e. `client_id` and `client_secret`.
-      required:
-      - client_secret
-      - client_id
-      type: object
-      properties:
-        client_secret:
-          format: password
-          description: Client secret
-          type: string
-        client_id:
-          description: Client identifier
-          type: string
     UserProfile:
       description: An object representing user profile infos.
       type: object
@@ -1010,6 +949,122 @@ components:
             that the extension be represented using the RFC 3966 [RFC3966] extension
             syntax, for example, +1 (604) 555-1234;ext=5678.
           type: string
+    ServiceProviderSummary:
+      description: An object representing one service provider.
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          description: Identifier of the provider.
+          type: integer
+    ServiceProviderSummaryPage:
+      description: An object representing one service provider.
+      type: object
+      allOf:
+      - required:
+        - service_providers
+        type: object
+        properties:
+          service_providers:
+            description: An array of service provider summary in one page.
+            type: array
+            items:
+              $ref: '#/components/schemas/ServiceProviderSummary'
+      - $ref: '#/components/schemas/Page'
+    ServiceProviderCredentials:
+      description: The credentials i.e. `client_id` and `client_secret`.
+      required:
+      - client_secret
+      - client_id
+      type: object
+      properties:
+        client_secret:
+          format: password
+          description: Client secret
+          type: string
+        client_id:
+          description: Client identifier
+          type: string
+    ServiceProvider:
+      description: An object representing one service provider.
+      required:
+      - redirect_uris
+      - grant_types
+      - application_type
+      type: object
+      properties:
+        redirect_uris:
+          description: Array of Redirection URI values used by the Client. One of
+            these registered Redirection URI values MUST exactly match the redirect_uri
+            parameter value used in each Authorization Request, with the matching
+            performed as described in Section 6.2.1 of [RFC3986] (Simple String Comparison).
+          type: array
+          items:
+            type: string
+        grant_types:
+          description: "JSON array containing a list of the OAuth 2.0 Grant Types\
+            \ that the Client is declaring that it will restrict itself to using.\
+            \ The Grant Type values used by \n\nOpenID Connect are:\n1. authorization_code:\
+            \ The Authorization Code Grant Type described in OAuth 2.0 Section 4.1.\n\
+            1. implicit: The Implicit Grant Type described in OAuth 2.0 Section 4.2.\n\
+            1. refresh_token: The Refresh Token Grant Type described in OAuth 2.0\
+            \ Section 6.\n\nThe following table lists the correspondence between response_type\
+            \ values that the Client will use and grant_type values that MUST be included\
+            \ in the registered grant_types list:\n\n1. code: authorization_code\n\
+            1. id_token: implicit\n1. token id_token: implicit\n1. code id_token:\
+            \ authorization_code, implicit\n1. code token: authorization_code, implicit\n\
+            1. code token id_token: authorization_code, implicit\n\nIf omitted, the\
+            \ default is that the Client will use only the authorization_code Grant\
+            \ Type."
+          type: array
+          items:
+            type: string
+        application_type:
+          description: 'Kind of the application. The default, if omitted, is web.
+            The defined values are native or web. Web Clients using the OAuth Implicit
+            Grant Type MUST only register URLs using the https scheme as redirect_uris;
+            they MUST NOT use localhost as the hostname. Native Clients MUST only
+            register redirect_uris using custom URI schemes or URLs using the http:
+            scheme with localhost as the hostname. Authorization Servers MAY place
+            additional constraints on Native Clients. Authorization Servers MAY reject
+            Redirection URI values using the http scheme, other than the localhost
+            case for Native Clients. The Authorization Server MUST verify that all
+            the registered redirect_uris conform to these constraints. This prevents
+            sharing a Client ID across different types of Clients.'
+          enum:
+          - web
+          - native
+          type: string
+        name:
+          description: Name of the Client to be presented to the End-User. If desired,
+            representation of this Claim in different languages and scripts is represented
+            as described in Section 2.1.
+          type: string
+    ServiceProviderInfo:
+      description: Additional information related to service provider.
+      type: object
+      properties:
+        logo_uri:
+          description: URL that references a logo for the Client application. If present,
+            the server SHOULD display this image to the End-User during approval.
+            The value of this field MUST point to a valid image file. If desired,
+            representation of this Claim in different languages and scripts is represented
+            as described in Section 2.1.
+          type: string
+        contacts:
+          description: Array of e-mail addresses of people responsible for this Client.
+            This might be used by some providers to enable a Web user interface to
+            modify the Client information.
+          type: array
+          items:
+            type: string
+        client_uri:
+          description: ""
+        policy_uri:
+          description: ""
+        tos_uri:
+          description: ""
   responses:
     UnAuthorized:
       content:
@@ -1028,8 +1083,8 @@ security:
 tags:
 - name: user
   description: User relater API
-- name: client
-  description: Client related API
+- name: service-provider
+  description: Service provider related API
 - name: scope
   description: Scope related API
 - name: claim
