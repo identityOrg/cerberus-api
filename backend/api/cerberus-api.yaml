@@ -441,45 +441,6 @@ paths:
       operationId: create-claim
       summary: Create a Claim
       description: Creates a new instance of a `Claim`.
-  /v1/api/serviceproviders:
-    summary: Path used to manage the list of serviceproviders.
-    description: The REST endpoint/path used to list and create zero or more `ServiceProvider`
-      entities.  This path contains a `GET` and `POST` operation to perform the list
-      and create tasks, respectively.
-    get:
-      tags:
-      - service-provider
-      - superuser
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ServiceProvider'
-          description: Successful response - returns an array of `ServiceProvider`
-            entities.
-      operationId: get-service-providers
-      summary: List All serviceproviders
-      description: Gets a list of all `ServiceProvider` entities.
-    post:
-      requestBody:
-        description: A new `ServiceProvider` to be created.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ServiceProvider'
-        required: true
-      tags:
-      - service-provider
-      - superuser
-      responses:
-        "201":
-          description: Successful response.
-      operationId: create-service-provider
-      summary: Create a ServiceProvider
-      description: Creates a new instance of a `ServiceProvider`.
   /v1/api/serviceproviders/{id}:
     summary: Path used to manage a single ServiceProvider.
     description: The REST endpoint/path used to get, update, and delete single instances
@@ -584,6 +545,60 @@ paths:
         type: integer
       in: path
       required: true
+  /v1/api/serviceproviders:
+    summary: Path used to manage the list of serviceproviders.
+    description: The REST endpoint/path used to list and create zero or more `ServiceProvider`
+      entities.  This path contains a `GET` and `POST` operation to perform the list
+      and create tasks, respectively.
+    get:
+      tags:
+      - service-provider
+      - superuser
+      parameters:
+      - name: page_size
+        description: |-
+          Number of items in each page.
+          Default value is 10.
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: page_number
+        description: |-
+          Page number to return in response.
+          Starts with 1 and default value is 1 too.
+        schema:
+          type: integer
+        in: query
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceProviderSummaryPage'
+          description: Successful response - returns an array of `ServiceProvider`
+            entities.
+      operationId: get-service-providers
+      summary: List All serviceproviders
+      description: Gets a list of all `ServiceProvider` entities.
+    post:
+      requestBody:
+        description: A new `ServiceProvider` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceProvider'
+        required: true
+      tags:
+      - service-provider
+      - superuser
+      responses:
+        "201":
+          description: Successful response.
+      operationId: create-service-provider
+      summary: Create a ServiceProvider
+      description: Creates a new instance of a `ServiceProvider`.
 components:
   schemas:
     UserSummary:
