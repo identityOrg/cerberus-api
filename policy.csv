@@ -1,0 +1,3 @@
+p,.*,10.0.0.0/8,/v1/spec, GET
+g,asdasd,admin
+p,admin,0.0.0.0/0,/v1/api/scopes,GET

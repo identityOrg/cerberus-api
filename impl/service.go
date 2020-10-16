@@ -1,12 +1,16 @@
 package impl
 
 import (
-	"github.com/identityOrg/cerberus-api/backend/api"
+	 "github.com/identityOrg/cerberus-api"
 	"github.com/labstack/echo/v4"
 	"net/http"
 )
 
 type CerberusAPI struct {
+}
+
+func NewCerberusAPI() *CerberusAPI {
+	return &CerberusAPI{}
 }
 
 func (c CerberusAPI) GetClaims(ctx echo.Context, params api.GetClaimsParams) error {

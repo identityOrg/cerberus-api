@@ -3,7 +3,7 @@
 #Un-comment the below line to install the generator
 #go get github.com/deepmap/oapi-codegen/cmd/oapi-codegen
 #Generate api code
-oapi-codegen -package api -generate "types,server,spec" -o api.gen.go cerberus-api.yaml
+oapi-codegen -package cerberus-api -generate "types,server,spec" -o api.gen.go cerberus-api.yaml
 #Generate test api code
 #oapi-codegen -package api -generate "client" -o api.gen_test.go cerberus-api.yaml
 #Add file to git stage

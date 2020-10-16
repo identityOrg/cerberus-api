@@ -1,12 +1,12 @@
 package impl
 
 import (
-	"github.com/identityOrg/cerberus-api/backend/api"
+	main "github.com/identityOrg/cerberus-api"
 	"github.com/labstack/echo/v4"
 	"net/http"
 )
 
-func (c CerberusAPI) GetUsers(ctx echo.Context, params api.GetUsersParams) error {
+func (c CerberusAPI) GetUsers(ctx echo.Context, params main.GetUsersParams) error {
 	return ctx.String(http.StatusNotImplemented, "\"Not Implemented\"")
 }
 

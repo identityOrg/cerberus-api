@@ -1,7 +1,7 @@
 package impl
 
 import (
-	"github.com/identityOrg/cerberus-api/backend/api"
+	"github.com/identityOrg/cerberus-api"
 	"github.com/labstack/echo/v4"
 	"net/http"
 )
