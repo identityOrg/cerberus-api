@@ -687,8 +687,12 @@ components:
             MUST NOT rely upon this value being unique.
           type: string
       example:
-        given_name: ""
-        surname: ""
+        given_name: some text
+        family_name: some text
+        name: some text
+        middle_name: some text
+        nickname: some text
+        preferred_username: some text
     Error:
       description: An error response object
       type: object
@@ -696,7 +700,7 @@ components:
         error:
           description: Error code
           type: string
-        description:
+        message:
           description: Detail description
           type: string
     ChangePasswordRequest:
@@ -823,6 +827,9 @@ components:
         email:
           description: Email id of the user to confirm with user store
           type: string
+      example:
+        username: some text
+        email: some text
     UserResetPassword:
       description: A reset password request
       required:
@@ -836,6 +843,9 @@ components:
         username:
           description: Username of the user
           type: string
+      example:
+        otp: some text
+        username: some text
     UserUpdate:
       description: A request object to update a user
       type: object
@@ -843,6 +853,14 @@ components:
         name:
           $ref: '#/components/schemas/UserName'
           description: User's name
+      example:
+        name:
+          given_name: some text
+          family_name: some text
+          name: some text
+          middle_name: some text
+          nickname: some text
+          preferred_username: some text
     UserStatusUpdate:
       description: A update status request
       required:
@@ -852,6 +870,8 @@ components:
         active:
           description: New status to change to.
           type: boolean
+      example:
+        active: true
     Claim:
       description: A claim configuration object
       required:
@@ -902,6 +922,10 @@ components:
             contain information published by the End-User or an organization that
             the End-User is affiliated with.
           type: string
+      example:
+        profile: some text
+        picture: some text
+        website: some text
     UserAddress:
       description: End-User's preferred postal address. The value of the address member
         is a JSON [RFC4627] structure containing some or all of the members defined
@@ -933,6 +957,13 @@ components:
         postal_code:
           description: Zip code or postal code component.
           type: string
+      example:
+        formatted: some text
+        street_address: some text
+        locality: some text
+        region: some text
+        country: some text
+        postal_code: some text
     UserContact:
       description: User contact info
       type: object
@@ -964,6 +995,11 @@ components:
             that the extension be represented using the RFC 3966 [RFC3966] extension
             syntax, for example, +1 (604) 555-1234;ext=5678.
           type: string
+      example:
+        email_verified: true
+        email: some text
+        phone_number_verified: true
+        phone_number: some text
     ServiceProviderSummary:
       description: An object representing one service provider.
       required:
