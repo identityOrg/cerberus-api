@@ -1115,11 +1115,9 @@ components:
       type: object
       properties:
         page_number:
-          format: int32
           description: Page number of the response chunk
           type: integer
         page_total:
-          format: int32
           description: Total available pages
           type: integer
     ScopePage:
