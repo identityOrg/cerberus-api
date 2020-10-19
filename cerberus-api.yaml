@@ -1086,11 +1086,11 @@ components:
       description: An error response object
       type: object
       properties:
-        error:
-          description: Error code
-          type: string
         message:
           description: Detail description
+          type: string
+        error_code:
+          description: Error code
           type: string
     ChangePasswordRequest:
       description: A change password request object
